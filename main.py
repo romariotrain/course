@@ -16,8 +16,8 @@ class VK:
        return response.json()
 
 
-class Yandex:
-    def _init__(self, yandex_token: str):
+class YaUpLoader:
+    def _init__(self, token: str):
         self.token = yandex_token
 
     def get_headers(self):
@@ -25,18 +25,18 @@ class Yandex:
             'Content-Type' : 'application/json',
             'Authorization' : 'OAuth {}'.format(self.token)}
 
-    def upload(self, file_url):
+    def upload(self, photo_url):
         url = 'https://cloud-api.yandex.net:443/v1/disk/resources/upload'
         headers = self.get_headers
-        params = {'path': file_url}
+        params = {'path': photo_url}
         response = requests.get(url, headers = headers, params = params)
         return response
 
     def upload_to_disk(self):
-        for file_url in list_:
-            response_href = self.upload(file_url)
+        for photo_url in dict_:
+            response_href = self.upload(photo_url)
             href = response_href.get('href','')
-            response_ = requests.put(href, data=open(file_url, 'rb'))
+            response_ = requests.put(href, photo_url)
 
 
 with open('token.txt','r') as file_object:
@@ -46,7 +46,8 @@ vk = VK(access_token, user_id)
 
 with open('yandex_token.txt','r') as file_object:
     yandex_token = file_object.read().strip()
-
+ya = YaUpLoader(yandex_token)
+print(yandex_token)
 
 dict_ = {}
 
@@ -95,10 +96,11 @@ def get_photo_url():
         dict_[likes] = big_photo
 
 
-pprint(photos)
+# pprint(photos)
 get_photo_url()
 # print(len(list_))
 pprint(dict_)
+# ya.upload_to_disk()
 #
 # ya = Yandex()
 # ya.upload_to_disk()
